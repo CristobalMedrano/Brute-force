@@ -48,8 +48,8 @@ DEBUG_MAIN_FILE = $(DEBUG_FILE).o
 #Otros archivos
 #FILE_1 = name
 #OUT_FILE_1 = name.o
-
-OBJECTS = 
+FILE_1 = menu
+OBJECTS = $(FILE_1).o
 
 
 
@@ -60,7 +60,7 @@ all: $(MAIN_FILE) $(OBJECTS)
 
 debug: $(DEBUG_MAIN_FILE)
 	$(CC) $(OPTS) -o $(EXECUTABLE) $(DEBUG_MAIN_FILE)
-	echo Debug mode done. Executable: $(EXECUTABLE)
+	echo Debug Compilation done. Executable: $(EXECUTABLE)
 
 execute: all
 	$(EXECUTE)
@@ -80,6 +80,8 @@ $(DEBUG_FILE).o: $(FILE).c $(HEADERS)$(FILE).h
 #Otros archivos.
 #$(FILE).o: $(SOURCES)$(FILE).c $(HEADERS)$(FILE).h
 #	$(CC) $(OPTS) $(INCLUDE) -c $(SOURCES)$(FILE).c -o $(FILE).o
+$(FILE_1).o: $(SOURCES)$(FILE_1).c $(HEADERS)$(FILE_1).h
+	$(CC) $(OPTS) $(INCLUDE) -c $(SOURCES)$(FILE_1).c -o $(FILE_1).o
 
 .PHONY: clean
 clean:
