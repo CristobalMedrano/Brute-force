@@ -1,5 +1,5 @@
-#ifndef _FUNC_MENU_H_
-#define _FUNC_MENU_H_
+#ifndef _MENU_H
+#define _MENU_H
  
 /*
     Funciones del Menu.
@@ -10,7 +10,6 @@ void showMenu();
 void validateOption(int* option, int min, int max);
 void cleanScreen();
 void pressToContinue();
-char* getFileName();
 void about();
 void menu(int* option, int min, int max);
 #endif

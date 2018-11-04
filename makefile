@@ -49,7 +49,8 @@ DEBUG_MAIN_FILE = $(DEBUG_FILE).o
 #FILE_1 = name
 #OUT_FILE_1 = name.o
 FILE_1 = menu
-OBJECTS = $(FILE_1).o
+FILE_2 = read_file
+OBJECTS = $(FILE_1).o $(FILE_2).o
 
 
 
@@ -58,13 +59,15 @@ all: $(MAIN_FILE) $(OBJECTS)
 	$(CC) $(OPTS) -o $(EXECUTABLE) $(MAIN_FILE) $(OBJECTS)
 	echo Compilation done. Executable: $(EXECUTABLE)
 
-debug: $(DEBUG_MAIN_FILE)
-	$(CC) $(OPTS) -o $(EXECUTABLE) $(DEBUG_MAIN_FILE)
+debug: $(DEBUG_MAIN_FILE) $(OBJECTS)
+	$(CC) $(OPTS) -o $(EXECUTABLE) $(DEBUG_MAIN_FILE) $(OBJECTS)
 	echo Debug Compilation done. Executable: $(EXECUTABLE)
 
 execute: all
 	$(EXECUTE)
 
+dexecute: debug
+	$(EXECUTE)
 #Main file.
 #Archivo principal.
 $(FILE).o: $(FILE).c $(HEADERS)$(FILE).h
@@ -82,6 +85,9 @@ $(DEBUG_FILE).o: $(FILE).c $(HEADERS)$(FILE).h
 #	$(CC) $(OPTS) $(INCLUDE) -c $(SOURCES)$(FILE).c -o $(FILE).o
 $(FILE_1).o: $(SOURCES)$(FILE_1).c $(HEADERS)$(FILE_1).h
 	$(CC) $(OPTS) $(INCLUDE) -c $(SOURCES)$(FILE_1).c -o $(FILE_1).o
+
+$(FILE_2).o: $(SOURCES)$(FILE_2).c $(HEADERS)$(FILE_2).h
+	$(CC) $(OPTS) $(INCLUDE) -c $(SOURCES)$(FILE_2).c -o $(FILE_2).o
 
 .PHONY: clean
 clean:

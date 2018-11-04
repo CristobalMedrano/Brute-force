@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <brute_force.h>
 #include <menu.h>
+#include <read_file.h>
 
-int main(int argc, char const *argv[])
+void initMenu()
 {
     int option;
     do
@@ -26,11 +27,17 @@ int main(int argc, char const *argv[])
                 printf("Programa finalizado.\n");
                 break;
         }
+
     }while(option != EXIT);
-    return 0;
 }
 
 void initBruteForce()
 {
+    getDataFile();
+}
 
+int main(int argc, char const *argv[])
+{
+    initMenu();
+    return 0;
 }

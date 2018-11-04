@@ -1,5 +1,5 @@
-#ifndef _FUNC_BFORCE_H_
-#define _FUNC_BFORCE_H_
+#ifndef _BRUTE_FORCE_H
+#define _BRUTE_FORCE_H
 
 /*
     Funciones principales.
@@ -11,5 +11,6 @@
 #define ABOUT 2
 #define EXIT 3
 
+void initMenu();
 void initBruteForce();
 #endif
