@@ -12,7 +12,12 @@ void showMenu()
 {
     printf("***------------------------------***\n");
     printf("**                                **\n");
+    #ifdef DEBUG
+    printf("*      Reino Clover(Debug Mode)    *\n");
+    #endif
+    #ifndef DEBUG
     printf("*            Reino Clover          *\n");
+    #endif
     printf("*            Version 0.0           *\n");
     printf("**                                **\n");
     printf("***------------------------------***\n");

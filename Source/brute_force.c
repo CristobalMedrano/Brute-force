@@ -4,7 +4,7 @@
 #include <menu.h>
 #include <read_file.h>
 
-void initMenu()
+void initBruteForce()
 {
     int option;
     do
@@ -15,8 +15,7 @@ void initMenu()
         switch(option)
         {
             case BRUTE_FORCE: 
-                initBruteForce();
-                pressToContinue();
+                runBruteForce();
                 break;
   
             case ABOUT:
@@ -31,13 +30,8 @@ void initMenu()
     }while(option != EXIT);
 }
 
-void initBruteForce()
+void runBruteForce()
 {
-    getDataFile();
-}
-
-int main(int argc, char const *argv[])
-{
-    initMenu();
-    return 0;
+    int** adjMatrix = getAdjMatrixFromFile();
+    pressToContinue();
 }

@@ -6,8 +6,8 @@
 char* getFileName()
 {
     printf("Ingrese el nombre del archivo: ");
-    char file[256];
-	char* filename = (char*)malloc(sizeof(char)*256);
+    char    file[256];
+	char*   filename = (char*)malloc(sizeof(char)*256);
     
     if (NULL != filename) 
     {
@@ -34,18 +34,17 @@ FILE* openFile(char* fileName)
     return NULL;
 }
 
-void readFile(FILE* currentFile)
+int** readFile(FILE* currentFile)
 {
     if(NULL != currentFile)
     {
-        int nProvision = 0;
+        int nProvision      = 0;
         fscanf(currentFile, "%d", &nProvision);
 
-        int** adjMatrix = createAdjMatrix(nProvision);
-        
-        int originCity = 0;
+        int** adjMatrix     = createAdjMatrix(nProvision);
+        int originCity      = 0;
         int destinationCity = 0;
-        int cost = 0;
+        int cost            = 0;
 
         while(0 == feof(currentFile))
         {
@@ -57,15 +56,17 @@ void readFile(FILE* currentFile)
         #ifdef DEBUG
             showAdjMatrix(nProvision, adjMatrix);
         #endif
+        return adjMatrix;
     }
+    return NULL;
 }
 
 int** createAdjMatrix(int nProvision)
 {
     int i = 0;
     int** adjMatrix = (int **)calloc(nProvision, sizeof(int *));
-                            for (i = 0; i < nProvision; i++)
-                            adjMatrix[i] = (int *)calloc(nProvision, sizeof(int));
+                        for (i = 0; i < nProvision; i++)
+                        adjMatrix[i] = (int *)calloc(nProvision, sizeof(int));
     if(NULL != adjMatrix)
     {
         return adjMatrix;
@@ -89,27 +90,31 @@ int** setAdjMatrix(int** adjMatrix, int originCity, int destinationCity, int cos
 
 void showAdjMatrix(int nProvision, int** adjMatrix)
 {
-    for(int i = 0; i < nProvision; i++)
+    if(NULL != adjMatrix && nProvision >= 0)
     {
-        
-        for(int j = 0; j < nProvision; j++)
+        int i = 0;
+        for(i = 0; i < nProvision; i++)
         {
-            if (adjMatrix[i][j] > 9) 
+            int j = 0;
+            for(j = 0; j < nProvision; j++)
             {
-                printf("%d  ", adjMatrix[i][j]);
+                if (adjMatrix[i][j] > 9) 
+                {
+                    printf("%d  ", adjMatrix[i][j]);
+                }
+                else
+                {
+                    printf("%d   ", adjMatrix[i][j]);
+                }
             }
-            else
-            {
-                printf("%d   ", adjMatrix[i][j]);
-            }
+            printf("\n");
         }
-        printf("\n");
-    }
+    }   
 }
 
 int closeFile(FILE* file, char* fileName)
 {
-    if (NULL != file || NULL != fileName) 
+    if (NULL != file && NULL != fileName) 
     {
         if(0 == fclose(file))
         {
@@ -121,11 +126,36 @@ int closeFile(FILE* file, char* fileName)
     return ERROR_CLOSE;
 }
 
-void getDataFile()
+int** getAdjMatrixFromFile()
 {
     char* fileName = getFileName();
-    FILE* currentFile = openFile(fileName);
-    readFile(currentFile);
-    int algo = closeFile(currentFile, fileName);
-    free(fileName);
+    if(NULL != fileName)
+    {
+        FILE* currentFile = openFile(fileName);
+        if(NULL != currentFile)
+        {
+            int** adjMatrix = readFile(currentFile);
+            if(NULL != adjMatrix)
+            {
+                int status = closeFile(currentFile, fileName);
+                if(SUCCESS == status)
+                {
+                    free(fileName);
+                    return adjMatrix;
+                }
+                #ifdef DEBUG
+                    printf("No es posible cerrar el archivo '%s'", fileName);
+                #endif
+                free(adjMatrix);
+            }
+            #ifdef DEBUG
+                printf("No es posible leer una matriz de adyacencia");
+            #endif
+        }
+        #ifdef DEBUG
+            printf("No es posible abrir el archivo '%s'", fileName);
+        #endif
+        free(fileName);
+    }
+    return NULL;
 }

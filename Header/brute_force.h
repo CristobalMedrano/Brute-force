@@ -11,6 +11,6 @@
 #define ABOUT 2
 #define EXIT 3
 
-void initMenu();
 void initBruteForce();
+void runBruteForce();
 #endif
