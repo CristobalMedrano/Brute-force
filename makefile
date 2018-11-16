@@ -37,30 +37,45 @@ BUILD = build
 
 #Variables
 CC = gcc
-CFLAGS = -Wall -g3
-CPPFLAGS = -I $(HEADERS)/
+OPTS = -Wall -g3 -I $(HEADERS)/
 DEBUG = -D DEBUG
 
 SRCS = $(wildcard $(SOURCES)/*.c)
 OBJS = $(patsubst %.c,%.o,$(SRCS))
+DOBJS = $(patsubst %.c,%_debug.o,$(SRCS))
 MAIN = $(patsubst %.c,%.o,$(wildcard *.c))
 
 .SILENT: all debug clean $(EXECUTABLE) debug_$(EXECUTABLE)
-#all: $(EXECUTABLE)
+all: $(EXECUTABLE)
+
+execute: $(EXECUTABLE)
+	$(EXECUTABLE)
+
+debug_execute: debug_$(EXECUTABLE)
+	debug_$(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJS) $(MAIN)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ 
+	$(CC) -o $@ $^ 
 	echo Compilation done. Executable: $(EXECUTABLE)
 
 debug: debug_$(EXECUTABLE)
 
-debug_$(EXECUTABLE): $(OBJS) main.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEBUG) -o $@ $^ 
+debug_$(EXECUTABLE): $(DOBJS) $(MAIN)
+	$(CC) -o $@ $^ 
 	echo Compilation done. Executable: debug_$(EXECUTABLE)
+
+$(SOURCES)/%.o: $(SOURCES)/%.c
+	$(CC) $(OPTS) -c -o $@ $<
+
+$(SOURCES)/%_debug.o: $(SOURCES)/%.c
+	$(CC) $(OPTS) $(DEBUG) -c -o $@ $<
+
+%.o: %.c
+	$(CC) $(OPTS) -c -o $@ $<
 
 .PHONY: clean
 clean:
 	$(REMOVE) $(SOURCES)\*.o
-	$(REMOVE) main.o
+	$(REMOVE) $(MAIN)
 	$(REMOVE) $(EXECUTABLE) debug_$(EXECUTABLE)
 	echo Full wipe.
