@@ -51,8 +51,8 @@ all: $(EXECUTABLE)
 execute: $(EXECUTABLE)
 	$(EXECUTABLE)
 
-debug_execute: debug_$(EXECUTABLE)
-	debug_$(EXECUTABLE)
+#debug_execute: debug_$(EXECUTABLE)
+#	debug_$(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJS) $(MAIN)
 	$(CC) -o $@ $^ 

@@ -10,11 +10,11 @@
 
 char* getFileName();
 FILE* openFile(char* fileName);
-int** readFile(FILE* currentFile);
-int** createAdjMatrix(int nProvision);
+mapKC* readFile(FILE* currentFile);
+mapKC* createMapKindomClover();
+mapKC* setMapKingdomClover(mapKC* currentMapMC, int** adjMatrix, int nProvision);
 int** setAdjMatrix(int** adjMatrix, int originCity, int destinationCity, int cost);
-void showAdjMatrix(int nProvision, int** adjMatrix);
 int closeFile(FILE* file, char* fileName);
-int** getAdjMatrixFromFile();
+mapKC* getMapKC();
 
 #endif

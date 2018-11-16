@@ -3,9 +3,18 @@
 /*
 
 */
-typedef struct node
+typedef struct mapKC
 {
-    
-} node ;
+    int nProvision;
+    int** adjMatrix;
+
+} mapKC ;
+
+typedef struct travel
+{
+    int* route;
+    int cost;
+
+} travel;
 
 #endif

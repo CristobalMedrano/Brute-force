@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <structs.h>
+#include <utilities.h>
 #include <read_file.h>
 
 char* getFileName()
@@ -27,54 +29,72 @@ FILE* openFile(char* fileName)
     FILE* currentFile = fopen(fileName, "rb");
     if(NULL != currentFile)
     {
-        printf("Archivo '%s' abierto\n", fileName);
+        #ifdef DEBUG
+            printf("Archivo '%s' abierto\n", fileName);
+        #endif
         return currentFile;
     }
     printf("Error: El archivo '%s' no existe.\n", fileName);
     return NULL;
 }
 
-int** readFile(FILE* currentFile)
+mapKC* readFile(FILE* currentFile)
 {
     if(NULL != currentFile)
     {
         int nProvision      = 0;
         fscanf(currentFile, "%d", &nProvision);
 
-        int** adjMatrix     = createAdjMatrix(nProvision);
-        int originCity      = 0;
-        int destinationCity = 0;
-        int cost            = 0;
+        mapKC* newMapKC     = createMapKindomClover();
+        int** adjMatrix     = createMatrix(nProvision, nProvision);
 
-        while(0 == feof(currentFile))
+        if (NULL != adjMatrix && NULL != newMapKC) 
         {
-            fscanf(currentFile, "%d", &originCity);
-            fscanf(currentFile, "%d", &destinationCity);
-            fscanf(currentFile, "%d", &cost);
-            adjMatrix = setAdjMatrix(adjMatrix, originCity, destinationCity, cost);
+            int originCity      = 0;
+            int destinationCity = 0;
+            int cost            = 0;
+
+            while(0 == feof(currentFile))
+            {
+                fscanf(currentFile, "%d", &originCity);
+                fscanf(currentFile, "%d", &destinationCity);
+                fscanf(currentFile, "%d", &cost);
+                adjMatrix = setAdjMatrix(adjMatrix, originCity, destinationCity, cost);
+            }
+            #ifdef DEBUG
+                showMatrix(nProvision, nProvision, adjMatrix);
+            #endif
+
+            newMapKC = setMapKingdomClover(newMapKC, adjMatrix, nProvision);
+            return newMapKC;
         }
-        #ifdef DEBUG
-            showAdjMatrix(nProvision, adjMatrix);
-        #endif
-        return adjMatrix;
     }
     return NULL;
 }
 
-int** createAdjMatrix(int nProvision)
+mapKC* createMapKindomClover()
 {
-    int i = 0;
-    int** adjMatrix = (int **)calloc(nProvision, sizeof(int *));
-                        for (i = 0; i < nProvision; i++)
-                        adjMatrix[i] = (int *)calloc(nProvision, sizeof(int));
-    if(NULL != adjMatrix)
+    mapKC* newMapKC = (mapKC*)malloc(sizeof(mapKC));
+    if(NULL != newMapKC)
     {
-        return adjMatrix;
+        newMapKC->adjMatrix = NULL;
+        newMapKC->nProvision = 0;
+        return newMapKC;
     }
-    printf("Memoria insuficiente: createAdjMatrix()\n");
+    printf("Memoria insuficiente: createMapKindomClover()\n");
     printf("Error: read_file.c\n");
     return NULL;
-    
+}
+
+mapKC* setMapKingdomClover(mapKC* currentMapMC, int** adjMatrix, int nProvision)
+{
+    if(NULL != currentMapMC)
+    {
+        currentMapMC->adjMatrix = adjMatrix;
+        currentMapMC->nProvision = nProvision;
+        return currentMapMC;
+    }
+    return NULL;
 }
 
 int** setAdjMatrix(int** adjMatrix, int originCity, int destinationCity, int cost)
@@ -88,37 +108,15 @@ int** setAdjMatrix(int** adjMatrix, int originCity, int destinationCity, int cos
     return NULL;
 }
 
-void showAdjMatrix(int nProvision, int** adjMatrix)
-{
-    if(NULL != adjMatrix && nProvision >= 0)
-    {
-        int i = 0;
-        for(i = 0; i < nProvision; i++)
-        {
-            int j = 0;
-            for(j = 0; j < nProvision; j++)
-            {
-                if (adjMatrix[i][j] > 9) 
-                {
-                    printf("%d  ", adjMatrix[i][j]);
-                }
-                else
-                {
-                    printf("%d   ", adjMatrix[i][j]);
-                }
-            }
-            printf("\n");
-        }
-    }   
-}
-
 int closeFile(FILE* file, char* fileName)
 {
     if (NULL != file && NULL != fileName) 
     {
         if(0 == fclose(file))
         {
-            printf("Archivo '%s' cerrado.\n", fileName);
+            #ifdef DEBUG
+                printf("Archivo '%s' cerrado.\n", fileName);
+            #endif
             return SUCCESS;
         }
     }
@@ -126,7 +124,7 @@ int closeFile(FILE* file, char* fileName)
     return ERROR_CLOSE;
 }
 
-int** getAdjMatrixFromFile()
+mapKC* getMapKC()
 {
     char* fileName = getFileName();
     if(NULL != fileName)
@@ -134,26 +132,28 @@ int** getAdjMatrixFromFile()
         FILE* currentFile = openFile(fileName);
         if(NULL != currentFile)
         {
-            int** adjMatrix = readFile(currentFile);
-            if(NULL != adjMatrix)
+            mapKC* currentMapKC = readFile(currentFile);
+            if(NULL != currentMapKC)
             {
                 int status = closeFile(currentFile, fileName);
                 if(SUCCESS == status)
                 {
                     free(fileName);
-                    return adjMatrix;
+                    printf("Archivo cargado correctamente.\n");
+                    return currentMapKC;
                 }
                 #ifdef DEBUG
-                    printf("No es posible cerrar el archivo '%s'", fileName);
+                    printf("No es posible cerrar el archivo '%s'\n", fileName);
                 #endif
-                free(adjMatrix);
+                free(currentMapKC->adjMatrix);
+                free(currentMapKC);
             }
             #ifdef DEBUG
-                printf("No es posible leer una matriz de adyacencia");
+                printf("No es posible leer una matriz de adyacencia\n");
             #endif
         }
         #ifdef DEBUG
-            printf("No es posible abrir el archivo '%s'", fileName);
+            printf("No es posible abrir el archivo '%s'\n", fileName);
         #endif
         free(fileName);
     }

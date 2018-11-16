@@ -13,4 +13,9 @@
 
 void initBruteForce();
 void runBruteForce();
+travel* createTravel();
+travel* setCurrentTravel(travel* currentTravel, int* route, int cost);
+void bruteForce(int** adjmatrix, int nProvision, int* cities);
+int* makeCities(int nProvision);
+void printCurrent(travel* currentTravel, int nProvision);
 #endif
