@@ -61,57 +61,27 @@ int* makeCities(int nProvision)
     
 }
 
-travel* createTravel()
-{
-    travel* newTravel = (travel*)malloc(sizeof(travel));
-    if(NULL != newTravel)
-    {
-        newTravel->route = NULL;
-        newTravel->cost = 0;
-        return newTravel;
-    }
-    printf("Memoria insuficiente: createTravel()\n");
-    printf("Error: brute_force.c\n");
-    return NULL;
-}
-
-travel* setCurrentTravel(travel* currentTravel, int* route, int cost)
-{
-    if(NULL != currentTravel)
-    {
-        currentTravel->route = route;
-        currentTravel->cost = cost;
-        return currentTravel;
-    }
-    return NULL;
-}
-
-void bruteForce(int** adjmatrix, int nProvision, int* cities)
+void bruteForce(int** adjMatrix, int nProvision, int* cities)
 {
     int fact = factorial(nProvision);
     travel* travels[fact];
-    int* route = (int*)malloc(sizeof(int)*nProvision);
     int i   = 0;
     int j   = 0;
     int y   = 0;
     int aux = 0;
     while (y != fact)
     {
-        travel* currentTravel = createTravel();
-        int k = 0;
-        for (k = 0; k < nProvision; k++)
-        {
-            route[k] = cities[k];
-        }
-        currentTravel = setCurrentTravel(currentTravel, route, 0);
+        travel* currentTravel = makeRoute(adjMatrix, nProvision, cities);
         printCurrent(currentTravel, nProvision);
         travels[y] = currentTravel;
 
-        /*printf("secuencia actual: ");
+        /*
+        printf("secuencia actual: ");
         for (k = 0; k < nProvision; k++)
         {
             printf("%d", travels[y]->route[k]);
-        }*/
+        }
+        printf("\n");*/
 
         j = 0 ;
         i = 1 ;
@@ -132,9 +102,70 @@ void bruteForce(int** adjmatrix, int nProvision, int* cities)
     }
 }
 
+travel* makeRoute(int** adjMatrix, int nProvision, int* cities)
+{
+    int* route = (int*)malloc(sizeof(int)*nProvision);
+    if(NULL != route)
+    {
+        travel* currentTravel   = createTravel();
+        int k                   = 0;
+        int currentRouteCost    = 0;
+
+        for (k = 0; k < nProvision; k++)
+        {
+            route[k] = cities[k];
+        }
+        currentRouteCost        = routeCost(adjMatrix, nProvision, route); 
+        currentTravel           = setCurrentTravel(currentTravel, route, currentRouteCost);
+        return currentTravel;
+    }
+    return NULL;
+}
+
+travel* createTravel()
+{
+    travel* newTravel = (travel*)malloc(sizeof(travel));
+    if(NULL != newTravel)
+    {
+        newTravel->route = NULL;
+        newTravel->cost = 0;
+        return newTravel;
+    }
+    printf("Memoria insuficiente: createTravel()\n");
+    printf("Error: brute_force.c\n");
+    return NULL;
+}
+
+
+int routeCost(int** adjMatrix, int nProvision, int* route)
+{
+    int cost        = 2;
+    int i           = 0;
+    int startCity   = 0;
+    int endCity     = 0;
+
+    for(i = 1; i < nProvision; i++) 
+    {
+        startCity   = route[i-1];
+        endCity     = route[i];
+        cost        = adjMatrix[startCity][endCity] + cost;
+    }
+    return cost;
+}
+
+travel* setCurrentTravel(travel* currentTravel, int* route, int cost)
+{
+    if(NULL != currentTravel)
+    {
+        currentTravel->route = route;
+        currentTravel->cost = cost;
+        return currentTravel;
+    }
+    return NULL;
+}
+
 void printCurrent(travel* currentTravel, int nProvision)
 {
-    printf("\n");
     #ifdef DEBUG
         fflush(stdin);
         int k = 0;
@@ -144,7 +175,7 @@ void printCurrent(travel* currentTravel, int nProvision)
         {
             printf("%d", currentTravel->route[k]);
         }
-        printf("- Coste de ruta: %d\n", currentTravel->cost);
+        printf(" - Coste de ruta: %d\n", currentTravel->cost);
         printf("Presione intro para continuar...");
         getchar();
         #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
