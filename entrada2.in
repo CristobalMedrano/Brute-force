@@ -1,0 +1,101 @@
+pivot 26
+costAux 26
+ travels[i]->cost  26
+ travels[j]->cost  26
+indexpivot 23
+costAux 26
+ travels[i]->cost  18
+ travels[j]->cost  26
+costAux 27
+ travels[i]->cost  21
+ travels[j]->cost  27
+costAux 29
+ travels[i]->cost  20
+ travels[j]->cost  29
+costAux 27
+ travels[i]->cost  22
+ travels[j]->cost  27
+costAux 29
+ travels[i]->cost  26
+ travels[j]->cost  29
+cut 18indexPivot 1
+pivot 23
+costAux 23
+ travels[i]->cost  23
+ travels[j]->cost  23
+indexpivot 17
+costAux 18
+ travels[i]->cost  24
+ travels[j]->cost  18
+costAux 24
+ travels[i]->cost  18
+ travels[j]->cost  24
+costAux 23
+ travels[i]->cost  22
+ travels[j]->cost  23
+costAux 25
+ travels[i]->cost  20
+ travels[j]->cost  25
+costAux 24
+ travels[i]->cost  19
+ travels[j]->cost  24
+costAux 25
+ travels[i]->cost  20
+ travels[j]->cost  25
+costAux 25
+ travels[i]->cost  23
+ travels[j]->cost  25
+cut 12indexPivot 1
+pivot 22
+costAux 22
+ travels[i]->cost  16
+ travels[j]->cost  22
+indexpivot 11
+costAux 18
+ travels[i]->cost  19
+ travels[j]->cost  18
+costAux 22
+ travels[i]->cost  18
+ travels[j]->cost  22
+costAux 22
+ travels[i]->cost  22
+ travels[j]->cost  22
+cut 10indexPivot 0
+pivot 19
+costAux 19
+ travels[i]->cost  20
+ travels[j]->cost  19
+indexpivot 9
+costAux 20
+ travels[i]->cost  18
+ travels[j]->cost  20
+costAux 21
+ travels[i]->cost  18
+ travels[j]->cost  21
+costAux 21
+ travels[i]->cost  19
+ travels[j]->cost  21
+cut 4indexPivot 0
+pivot 18
+costAux 18
+ travels[i]->cost  16
+ travels[j]->cost  18
+indexpivot 3
+costAux 16
+ travels[i]->cost  18
+ travels[j]->cost  16
+costAux 18
+ travels[i]->cost  16
+ travels[j]->cost  18
+costAux 18
+ travels[i]->cost  18
+ travels[j]->cost  18
+cut 2indexPivot 1
+pivot 16
+costAux 16
+ travels[i]->cost  16
+ travels[j]->cost  16
+indexpivot 1
+costAux 16
+ travels[i]->cost  16
+ travels[j]->cost  16

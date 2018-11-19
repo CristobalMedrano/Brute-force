@@ -13,13 +13,16 @@
 
 void initBruteForce();
 void runBruteForce();
+
 int* makeCities(int nProvision);
-void bruteForce(int** adjmatrix, int nProvision, int* cities);
 travel* makeRoute(int** adjMatrix, int nProvision, int* cities);
+int* copyRoutetoMemory(int* cities, int nProvision);
 travel* createTravel();
 int routeCost(int** adjMatrix, int nProvision, int* cities);
 travel* setCurrentTravel(travel* currentTravel, int* route, int cost);
+int* makePermutation(int* cities);
 
+travel* bruteForce(int** adjmatrix, int nProvision, int* cities);
 void printCurrent(travel* currentTravel, int nProvision);
 
 

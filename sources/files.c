@@ -3,7 +3,7 @@
 #include <string.h>
 #include <structs.h>
 #include <utilities.h>
-#include <read_file.h>
+#include <files.h>
 
 char* getFileName()
 {
@@ -24,9 +24,9 @@ char* getFileName()
     return NULL;
 }
 
-FILE* openFile(char* fileName)
+FILE* openFile(char* fileName, char* type)
 {
-    FILE* currentFile = fopen(fileName, "rb");
+    FILE* currentFile = fopen(fileName, type);
     if(NULL != currentFile)
     {
         #ifdef DEBUG
@@ -129,7 +129,7 @@ mapKC* getMapKC()
     char* fileName = getFileName();
     if(NULL != fileName)
     {
-        FILE* currentFile = openFile(fileName);
+        FILE* currentFile = openFile(fileName, "rb");
         if(NULL != currentFile)
         {
             mapKC* currentMapKC = readFile(currentFile);
@@ -139,7 +139,7 @@ mapKC* getMapKC()
                 if(SUCCESS == status)
                 {
                     free(fileName);
-                    printf("Archivo cargado correctamente.\n");
+                    printf("\nArchivo cargado correctamente.\n");
                     return currentMapKC;
                 }
                 #ifdef DEBUG
@@ -158,4 +158,32 @@ mapKC* getMapKC()
         free(fileName);
     }
     return NULL;
+}
+
+void saveFile(travel* currentTravel, char* fileName, int n)
+{
+    FILE* newFile = openFile(fileName, "wb");
+    if (NULL != newFile) 
+    {
+        fprintf(newFile, "%d\n", currentTravel->cost);
+        int i;
+        
+        fprintf(newFile, "0-");
+        for(i = 0; i < n; i++)
+        {   
+            if (i < n - 1) {
+                fprintf(newFile, "%d-", currentTravel->route[i]+1);
+            }
+            
+            if (i == (n - 1))
+            {
+                fprintf(newFile, "%d", currentTravel->route[i]+1);
+                fprintf(newFile, "-0");
+            }
+           
+        }
+        printf("Archivo solucion creado correctamente.\n");      
+        closeFile(newFile, fileName);  
+    }
+    
 }
