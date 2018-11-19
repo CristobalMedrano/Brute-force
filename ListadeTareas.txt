@@ -1,0 +1,6 @@
+- Quicksort (nlogn)
+- Quitar repeticiones (n)
+- Obtener el primer elemento (1)
+- Escribir el primer elemento. (n)
+- Agregar time.h
+- Realizar las pruebas.
